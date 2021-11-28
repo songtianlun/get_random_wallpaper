@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import {useState} from "react";
 import './App.css';
+import axios from "axios";
 
 const sizes = [
     {name:'0480 x 0854 - Android One', x:480, y:854},
@@ -85,10 +86,10 @@ function Control() {
     const [keyword, setKeyword] = useState(0);
     const [imgUrl, setImgUrl] = useState('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
     const listItems = sizes.map((obj,idx) =>
-        <option selected={size === idx ? "selected" : ""} key={idx} value={idx}>{obj.name}</option>
+        <option  key={idx} value={idx}>{obj.name}</option>
     );
     const keywordItems = keywords.map((obj, idx) =>
-        <option selected={keyword === idx ? "selected" : ""} key={idx} value={idx}>{obj.chinese}</option>
+        <option  key={idx} value={idx}>{obj.chinese}</option>
     )
     const handleGet = () => {
         console.log("Get!")
@@ -97,6 +98,20 @@ function Control() {
         setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
         console.log("url:",imgUrl)
         document.getElementById('random_wallpaper').src=imgUrl
+        axios.get('/api/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
+            .then(function (response) {
+                // handle success
+                console.log(response);
+                console.log(response.request.responseURL);
+                setImgUrl(response.request.responseURL);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
     }
     const handleSizeSelect = (event) => {
         console.log(event.target.value)
@@ -111,12 +126,20 @@ function Control() {
               <div className="row h-75 justify-content-center px-5 py-2 ">
                   <div className="col-3 order-1 m-auto">
                       <div className="row mt-5">
-                          <select className="col form-select" aria-label="Default select example" onChange={handleSizeSelect}>
+                          <select
+                              className="col form-select"
+                              aria-label="Default select example"
+                              defaultValue={size}
+                              onChange={handleSizeSelect}>
                               {listItems}
                           </select>
                       </div>
                       <div className="row mt-5">
-                          <select className="col form-select" aria-label="Default select example" onChange={handleKeywordSelect}>
+                          <select
+                              className="col form-select"
+                              aria-label="Default select example"
+                              defaultValue={keyword}
+                              onChange={handleKeywordSelect}>
                               {keywordItems}
                           </select>
                       </div>
