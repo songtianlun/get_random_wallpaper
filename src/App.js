@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import './App.css';
 import axios from "axios";
 
@@ -91,6 +91,9 @@ function Control() {
     const keywordItems = keywords.map((obj, idx) =>
         <option  key={idx} value={idx}>{obj.chinese}</option>
     )
+    useEffect(() => {
+        handleGet()
+    }, [])
     const handleGet = () => {
         console.log("Get!")
         console.log(sizes[size])
@@ -123,33 +126,42 @@ function Control() {
     }
       return (
           <>
-              <div className="row h-75 justify-content-center px-5 py-2 ">
-                  <div className="col-3 order-1 m-auto">
-                      <div className="row mt-5">
-                          <select
-                              className="col form-select"
-                              aria-label="Default select example"
-                              defaultValue={size}
-                              onChange={handleSizeSelect}>
-                              {listItems}
-                          </select>
+              <div className="row justify-content-center px-5 py-2 ">
+
+                  <div className="col-md-8 col-lg-3 m-auto">
+                      <div className="mx-4">
+                          <h6 className="m-0"><strong>说明：</strong></h6>
+                          <p className="m-0 mb-4">这是一个随机美图生成器，选择尺寸、主题，点击 <mark>Get</mark>
+                              获取，点击 <mark>Download</mark> 跳转直链。</p>
                       </div>
-                      <div className="row mt-5">
-                          <select
-                              className="col form-select"
-                              aria-label="Default select example"
-                              defaultValue={keyword}
-                              onChange={handleKeywordSelect}>
-                              {keywordItems}
-                          </select>
-                      </div>
-                      <div className="row mt-5">
-                          <button type="button" className="col btn btn-primary" onClick={handleGet}>Get</button>
-                      </div>
+                      <select
+                          className="col-8 form-select mt-2"
+                          aria-label="Default select example"
+                          defaultValue={size}
+                          onChange={handleSizeSelect}>
+                          {listItems}
+                      </select>
+                      <select
+                          className="col form-select mt-2"
+                          aria-label="Default select example"
+                          defaultValue={keyword}
+                          onChange={handleKeywordSelect}>
+                          {keywordItems}
+                      </select>
+                      <button type="button" className="col btn btn-primary mt-2 w-100" onClick={handleGet}>Get</button>
+                      <button type="button" className="col btn btn-primary mt-2 w-100"
+                              onClick={() => {
+                                  console.log("download:", imgUrl)
+                                  window.open(imgUrl)
+                              }}>Download</button>
+                      {/*<div>*/}
+                      {/*    <p>随机接口: {'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english']}</p>*/}
+                      {/*    <p>图片直链: {imgUrl}</p>*/}
+                      {/*</div>*/}
 
                   </div>
-                  <div className="col-6 align-content-center h-100 order-0 bg-info">
-                      <img className="mh-100 mw-100" id="random_wallpaper" src={imgUrl} alt="random" />
+                  <div className="col-md-8 col-lg-6 align-content-center h-100 ">
+                      <img className="mh-100 mw-100 mt-2 shadow rounded" id="random_wallpaper" src={imgUrl} alt="random" />
                   </div>
               </div>
           </>
@@ -173,15 +185,15 @@ function Header() {
                         <path
                             d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
                     </svg>
-                    <span className="fs-4">Get Random Wallpaper</span>
+                    <span className="fs-4"><h1 className="fs-4 my-1">Get Random Wallpaper</h1></span>
                 </a>
 
-                {/*<nav className="d-inline-flex mt-2 mt-md-0 ms-md-auto">*/}
-                {/*    <a className="me-3 py-2 text-dark text-decoration-none" href="#">Features</a>*/}
-                {/*    <a className="me-3 py-2 text-dark text-decoration-none" href="#">Enterprise</a>*/}
-                {/*    <a className="me-3 py-2 text-dark text-decoration-none" href="#">Support</a>*/}
-                {/*    <a className="py-2 text-dark text-decoration-none" href="#">Pricing</a>*/}
-                {/*</nav>*/}
+                <nav className="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+                    <a className="me-3 py-2 text-dark text-decoration-none" href="https://www.frytea.com/">Homepage</a>
+                    <a className="me-3 py-2 text-dark text-decoration-none" href="https://www.frytea.com/">About</a>
+                    {/*<a className="me-3 py-2 text-dark text-decoration-none" href="#">Support</a>*/}
+                    {/*<a className="py-2 text-dark text-decoration-none" href="#">Pricing</a>*/}
+                </nav>
             </div>
         </header>
     )
@@ -192,10 +204,19 @@ function Footer() {
         <footer className="row h-auto pt-2 mt-3 border-top">
 
             {/* Copyrights note */}
-            <div className="text-sm text-gray-600 mr-4">
-                Copyright © 2021 <a className="text-blue-600 hover:underline" href="https://www.frytea.com/">Frytea</a> •
-                <a className="text-blue-600 hover:underline" href="http://beian.miit.gov.cn/"> 粤 ICP 备 19144283 号 </a> <br/>
-                Powered by <a className="animate-spin" href="https://reactjs.org/"><img src={logo} className="App-logo" alt="logo" /></a>
+            <div className="fs-6 fw-light text-secondary mr-4 mx-4">
+                Copyright © 2021 •
+                <a className="text-secondary hover:underline" href="https://www.frytea.com/" target="_blank"> Frytea </a>•
+                <a className="text-secondary hover:underline" href="http://beian.miit.gov.cn/" target="_blank"> 粤 ICP 备 19144283 号 </a> <br/>
+                Powered by
+                <a className="animate-spin" target="_blank" href="https://unsplash.com">
+                    <svg className="ms-1" height="16" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m7.5 6.75v-6.75h9v6.75zm9 3.75h7.5v13.5h-24v-13.5h7.5v6.75h9z"/>
+                    </svg>
+                </a>
+                <a className="animate-spin" target="_blank" href="https://reactjs.org/">
+                    <img src={logo} className="App-logo" alt="logo" />
+                </a>
             </div>
         </footer>
     )
@@ -203,7 +224,7 @@ function Footer() {
 
 function App() {
   return (
-    <div className="container py-3 vh-100">
+    <div className="container py-3 min-vh-100">
         <Header />
         <Main />
         <Footer />

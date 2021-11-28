@@ -4,6 +4,8 @@ body {
 
 .container {
   max-width: 960px;
+  font-family: Georgia, 'STXihei' ,-apple-system , 'Hiragino Sans GB', 'Microsoft Yahei', 'WenQuanYi Micro Hei', 'ST Heiti', sans-serif;
+
 }
 
 .pricing-header {

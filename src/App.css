@@ -1,5 +1,5 @@
 .App-logo {
-  height: 6vmin;
+  height: 24px;
   pointer-events: none;
 }
 
@@ -23,3 +23,9 @@ img {
   }
 }
 
+p {
+  letter-spacing: 0.013rem;
+  line-height: 2;
+  font-weight: 400;
+  text-indent: 2rem;
+}
