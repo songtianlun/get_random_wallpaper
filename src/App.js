@@ -95,17 +95,17 @@ function Control() {
         handleGet()
     }, [])
     const handleGet = () => {
-        console.log("Get!")
-        console.log(sizes[size])
+        // console.log("Get!")
+        // console.log(sizes[size])
         // let imageUrl = 'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']
         setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
-        console.log("url:",imgUrl)
+        // console.log("url:",imgUrl)
         document.getElementById('random_wallpaper').src=imgUrl
         axios.get('/api/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
             .then(function (response) {
                 // handle success
-                console.log(response);
-                console.log(response.request.responseURL);
+                // console.log(response);
+                // console.log(response.request.responseURL);
                 setImgUrl(response.request.responseURL);
             })
             .catch(function (error) {
@@ -128,7 +128,7 @@ function Control() {
           <>
               <div className="row justify-content-center px-5 py-2 ">
 
-                  <div className="col-md-8 col-lg-3 m-auto">
+                  <div className="col-md-8 col-lg-5 m-auto">
                       <div className="mx-4">
                           <h6 className="m-0"><strong>说明：</strong></h6>
                           <p className="m-0 mb-4">这是一个随机美图生成器，选择尺寸、主题，点击 <mark>Get</mark>
