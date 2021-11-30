@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import {useState, useEffect} from "react";
 import './App.css';
 import axios from "axios";
+import {getDevice} from "./utils";
 
 const sizes = [
     {name:'0480 x 0854 - Android One', x:480, y:854},
@@ -53,7 +54,7 @@ const sizes = [
     {name:'4096 x 2304 - iMac 21.5 4K', x:4096, y:2304},
     {name:'4500 x 3000 - Surface Studio', x:4500, y:3000},
     {name:'5120 x 2880 - iMac 27 5K', x:5120, y:2880},
-    {name:'6016 x 3384 - Apple Pro Display XDR', x:6016, y:3384},
+    {name:'6016 x 3384 - Apple Pro Display XDR', x:6016, y:3384}
 ];
 
 const keywords =[
@@ -80,27 +81,41 @@ const keywords =[
     {chinese:"田径", english:"Athletics"},
 ]
 
-function Control() {
+function checkDevice() {
+    let deviceName = getDevice()
+    let deviceWidth = window.screen.width * window.devicePixelRatio
+    let deviceHeight = window.screen.height * window.devicePixelRatio
 
+    console.log(deviceName, deviceWidth,deviceHeight)
+    console.log(window.devicePixelRatio)
+}
+
+function getDeviceWidth() {
+    return window.screen.width * window.devicePixelRatio
+}
+
+function getDeviceHeight() {
+    return window.screen.height * window.devicePixelRatio
+}
+
+function Control() {
     const [size, setSize] = useState(38);
     const [keyword, setKeyword] = useState(0);
-    const [imgUrl, setImgUrl] = useState('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
+    const [imgUrl, setImgUrl] = useState('https://source.unsplash.com/random/'+getDeviceWidth()+'x'+getDeviceHeight()+"?"+keywords[keyword]['english'])
     const listItems = sizes.map((obj,idx) =>
         <option  key={idx} value={idx}>{obj.name}</option>
     );
     const keywordItems = keywords.map((obj, idx) =>
         <option  key={idx} value={idx}>{obj.chinese}</option>
     )
-    useEffect(() => {
-        handleGet()
-    }, [])
+
     const handleGet = () => {
         // console.log("Get!")
         // console.log(sizes[size])
         // let imageUrl = 'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']
         setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
         // console.log("url:",imgUrl)
-        document.getElementById('random_wallpaper').src=imgUrl
+        // document.getElementById('random_wallpaper').src=imgUrl
         axios.get('/api/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
             .then(function (response) {
                 // handle success
@@ -116,6 +131,11 @@ function Control() {
                 // always executed
             });
     }
+    useEffect(() => {
+        // handleGet()
+        checkDevice()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     const handleSizeSelect = (event) => {
         console.log(event.target.value)
         setSize(event.target.value)
@@ -126,9 +146,9 @@ function Control() {
     }
       return (
           <>
-              <div className="row justify-content-center px-5 py-2 ">
+              <div className="row justify-content-center px-sm-1 px-lg-5 py-2 gx-5">
 
-                  <div className="col-md-8 col-lg-5 m-auto">
+                  <div className="col-sm-12 col-lg-4 m-auto gy-4">
                       <div className="mx-4">
                           <h6 className="m-0"><strong>说明：</strong></h6>
                           <p className="m-0 mb-4">这是一个随机美图生成器，选择尺寸、主题，点击 <mark>Get</mark>
@@ -160,8 +180,11 @@ function Control() {
                       {/*</div>*/}
 
                   </div>
-                  <div className="col-md-8 col-lg-6 align-content-center h-100 ">
-                      <img className="mh-100 mw-100 mt-2 shadow rounded" id="random_wallpaper" src={imgUrl} alt="random" />
+                  <div className="col-sm-12 col-lg-8 align-content-center h-100 ">
+                      <img className="mh-100 mw-100 mt-2 shadow rounded"
+                           id="random_wallpaper"
+                           width={sizes[size]['x']+'px'}
+                           src={imgUrl} alt="random" />
                   </div>
               </div>
           </>
@@ -170,13 +193,15 @@ function Control() {
 
 function Main() {
     return (
-        <Control />
+        <main className="px-3 mb-4">
+            <Control />
+        </main>
     )
 }
 
 function Header() {
     return (
-        <header className="row h-auto ">
+        <header className="mb-auto">
             <div className="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
                 <a href="/" className="d-flex align-items-center text-dark text-decoration-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" fill="currentColor"
@@ -185,7 +210,7 @@ function Header() {
                         <path
                             d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
                     </svg>
-                    <span className="fs-4"><h1 className="fs-4 my-1">Get Random Wallpaper</h1></span>
+                    <span className="fs-4"><h1 className="fs-5 my-1">Get Random Wallpaper</h1></span>
                 </a>
 
                 <nav className="d-inline-flex mt-2 mt-md-0 ms-md-auto">
@@ -201,20 +226,20 @@ function Header() {
 
 function Footer() {
     return (
-        <footer className="row h-auto pt-2 mt-3 border-top">
+        <footer className="mt-auto pt-2 mt-3 border-top">
 
             {/* Copyrights note */}
-            <div className="fs-6 fw-light text-secondary mr-4 mx-4">
+            <div className="fw-light text-secondary mr-4 mx-4">
                 Copyright © 2021 •
-                <a className="text-secondary hover:underline" href="https://www.frytea.com/" target="_blank"> Frytea </a>•
-                <a className="text-secondary hover:underline" href="http://beian.miit.gov.cn/" target="_blank"> 粤 ICP 备 19144283 号 </a> <br/>
+                <a className="text-secondary hover:underline" href="https://www.frytea.com/" target="_blank" rel="noreferrer"> Frytea </a>•
+                <a className="text-secondary hover:underline" href="http://beian.miit.gov.cn/" target="_blank" rel="noreferrer"> 粤 ICP 备 19144283 号 </a> <br/>
                 Powered by
-                <a className="animate-spin" target="_blank" href="https://unsplash.com">
+                <a className="animate-spin" target="_blank" rel="noreferrer" href="https://unsplash.com">
                     <svg className="ms-1" height="16" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                         <path d="m7.5 6.75v-6.75h9v6.75zm9 3.75h7.5v13.5h-24v-13.5h7.5v6.75h9z"/>
                     </svg>
                 </a>
-                <a className="animate-spin" target="_blank" href="https://reactjs.org/">
+                <a className="animate-spin" target="_blank" href="https://reactjs.org/" rel="noreferrer">
                     <img src={logo} className="App-logo" alt="logo" />
                 </a>
             </div>
@@ -224,7 +249,7 @@ function Footer() {
 
 function App() {
   return (
-    <div className="container py-3 min-vh-100">
+    <div className="container-fluid h-100 p-3 mx-auto d-flex flex-column">
         <Header />
         <Main />
         <Footer />
