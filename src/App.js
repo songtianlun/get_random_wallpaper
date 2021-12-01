@@ -3,7 +3,7 @@ import {useState, useEffect} from "react";
 import './App.css';
 import axios from "axios";
 import {getDevice} from "./utils";
-import {Toast} from "bootstrap";
+import {Toast, Modal} from "bootstrap";
 
 const sizes = [
     {name:'0480 x 0854 - Android One', x:480, y:854},
@@ -165,9 +165,15 @@ function Control() {
         console.log(event.target.value)
         setKeyword(event.target.value)
     }
+    const showHelpModel = () => {
+        var myModal = document.getElementById('exampleModal')
+        var modal = new Modal(myModal)
+        modal.show()
+    }
       return (
           <>
               <ToastMessags Title={toastTitle} Message={toastMessage} />
+              <HelpModal url={imgUrl}/>
               <div className="row justify-content-center px-sm-1 px-lg-5 py-2 gx-5">
 
                   <div className="col-sm-12 col-lg-4 m-auto gy-4">
@@ -203,6 +209,8 @@ function Control() {
                                   console.log("download:", imgUrl)
                                   window.open(imgUrl)
                               }}>Download</button>
+                      <button type="button" className="col btn btn-primary mt-2 w-100"
+                              onClick={showHelpModel}>Help</button>
                       {/*<div>*/}
                       {/*    <p>随机接口: {'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english']}</p>*/}
                       {/*    <p>图片直链: {imgUrl}</p>*/}
@@ -288,6 +296,56 @@ function ToastMessags({Title, Message}) {
                     </div>
                     <div className="toast-body">
                         {Message}
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
+
+function HelpModal({url}) {
+    return (
+        <>
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div className="modal-dialog modal-dialog-scrollable">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">使用方法</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body">
+                            <p>
+                                第一次进入会根据您的设备尺寸获取对应尺寸的随机图片，
+                                之后可选择 <strong>尺寸</strong> 和 <strong>主题</strong> 再次获取随机图片。
+                            </p>
+                            <p>
+                                如果您对该图满意，
+                                可以 <strong>长按保存</strong> 或点击 <strong>Download</strong> 获取原图到本地后设为壁纸。
+                            </p>
+                            <p>
+                                如果您使用 <code>Ubuntu</code> 或其他使用 <code>GNOME</code> 桌面的 <code>Linux</code> 核心操作系统，可以使用以下命令将本图设置为壁纸：
+                            </p>
+                            <div className="bg-dark p-3 my-3 rounded">
+                                <code className="text-light">
+                                    $ gsettings set org.gnome.desktop.background picture-uri "{url}"
+                                </code>
+                            </div>
+                            <h5>联系作者</h5>
+                            <ul>
+                                <li>Blog: <a href="https://blog.frytea.com">https://blog.frytea.com</a></li>
+                                <li>HomePage: <a href="https://www.frytea.com">https://www.frytea.com</a></li>
+                                <li>E-mail: <a href="mailto:songtianlun@frytea.com">songtianlun@frytea.com</a></li>
+                                <li>WeChart/Phone: (+86)18803979433</li>
+                                <li>Google Voice: (+1)936-6662109</li>
+                            </ul>
+
+
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
