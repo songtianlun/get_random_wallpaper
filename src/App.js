@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import './App.css';
 import axios from "axios";
 import {getDevice} from "./utils";
+import {Toast} from "bootstrap";
 
 const sizes = [
     {name:'0480 x 0854 - Android One', x:480, y:854},
@@ -102,6 +103,9 @@ function Control() {
     const [size, setSize] = useState(38);
     const [keyword, setKeyword] = useState(0);
     const [imgUrl, setImgUrl] = useState('https://source.unsplash.com/random/'+getDeviceWidth()+'x'+getDeviceHeight()+"?"+keywords[keyword]['english'])
+    const [getting, setGetting]  = useState(false)
+    const [toastTitle, setToastTitle] = useState("通知")
+    const [toastMessage, setToastMessage] = useState("获取成功！")
     const listItems = sizes.map((obj,idx) =>
         <option  key={idx} value={idx}>{obj.name}</option>
     );
@@ -109,27 +113,44 @@ function Control() {
         <option  key={idx} value={idx}>{obj.chinese}</option>
     )
 
+    const showToast = (message) => {
+        var toastLiveExample = document.getElementById('liveToast')
+        var toast = new Toast(toastLiveExample)
+        setToastMessage(message)
+        toast.show()
+    }
+
     const handleGet = () => {
         // console.log("Get!")
         // console.log(sizes[size])
         // let imageUrl = 'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']
-        setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
+        // setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
         // console.log("url:",imgUrl)
         // document.getElementById('random_wallpaper').src=imgUrl
+        setGetting(true)
         axios.get('/api/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
             .then(function (response) {
                 // handle success
                 // console.log(response);
                 // console.log(response.request.responseURL);
+                let oldMainUrl = imgUrl.split('?')[0];
+                let newMainUrl = response.request.responseURL.split('?')[0];
+                if(oldMainUrl === newMainUrl){
+                    showToast("内容重复，请尝试重新获取。")
+                } else {
+                    showToast("获取成功！")
+                }
                 setImgUrl(response.request.responseURL);
             })
             .catch(function (error) {
                 // handle error
                 console.log(error);
+                showToast("错误："+error)
             })
             .then(function () {
                 // always executed
-            });
+                setGetting(false)
+            })
     }
     useEffect(() => {
         // handleGet()
@@ -146,6 +167,7 @@ function Control() {
     }
       return (
           <>
+              <ToastMessags Title={toastTitle} Message={toastMessage} />
               <div className="row justify-content-center px-sm-1 px-lg-5 py-2 gx-5">
 
                   <div className="col-sm-12 col-lg-4 m-auto gy-4">
@@ -168,7 +190,14 @@ function Control() {
                           onChange={handleKeywordSelect}>
                           {keywordItems}
                       </select>
-                      <button type="button" className="col btn btn-primary mt-2 w-100" onClick={handleGet}>Get</button>
+                      <button type="button" className="col btn btn-primary mt-2 w-100"
+                              onClick={handleGet}
+                              disabled={getting}>
+
+                          {getting ?
+                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : "Get"
+                          }
+                      </button>
                       <button type="button" className="col btn btn-primary mt-2 w-100"
                               onClick={() => {
                                   console.log("download:", imgUrl)
@@ -244,6 +273,25 @@ function Footer() {
                 </a>
             </div>
         </footer>
+    )
+}
+
+function ToastMessags({Title, Message}) {
+    return (
+        <>
+            <div className="position-fixed bottom-0 end-0 p-3" >
+                <div id="liveToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div className="toast-header">
+                        <strong className="me-auto">{Title}</strong>
+                        <button type="button" className="btn-close" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                    </div>
+                    <div className="toast-body">
+                        {Message}
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
 
