@@ -106,6 +106,7 @@ function Control() {
     const [getting, setGetting]  = useState(false)
     const [toastTitle, setToastTitle] = useState("通知")
     const [toastMessage, setToastMessage] = useState("获取成功！")
+    const [useMirror, setUseMirror] = useState(true)
     const listItems = sizes.map((obj,idx) =>
         <option  key={idx} value={idx}>{obj.name}</option>
     );
@@ -140,7 +141,11 @@ function Control() {
                 } else {
                     showToast("获取成功！")
                 }
-                setImgUrl(response.request.responseURL);
+                if(useMirror){
+                    setImgUrl(response.request.responseURL.replace(/images\.unsplash\.com/, "dogefs.s3.ladydaily.com/~/source/unsplash"))
+                } else {
+                    setImgUrl(response.request.responseURL);
+                }
             })
             .catch(function (error) {
                 // handle error
@@ -196,6 +201,14 @@ function Control() {
                           onChange={handleKeywordSelect}>
                           {keywordItems}
                       </select>
+                      <div className="form-check form-switch mt-2 m-auto">
+                          <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked={useMirror}></input>
+                          <label className="form-check-label"
+                                 htmlFor="flexSwitchCheckDefault">Use Chinese Mirrors (
+                              <a href="https://unsplash.dogedoge.com/" target="_blank" rel="noreferrer">
+                                  dogedoge</a>)
+                          </label>
+                      </div>
                       <button type="button" className="col btn btn-primary mt-2 w-100"
                               onClick={handleGet}
                               disabled={getting}>
@@ -211,6 +224,7 @@ function Control() {
                               }}>Download</button>
                       <button type="button" className="col btn btn-primary mt-2 w-100"
                               onClick={showHelpModel}>Help</button>
+
                       {/*<div>*/}
                       {/*    <p>随机接口: {'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english']}</p>*/}
                       {/*    <p>图片直链: {imgUrl}</p>*/}
