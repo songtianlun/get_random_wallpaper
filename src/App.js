@@ -159,7 +159,7 @@ function Control() {
     }
     useEffect(() => {
         // handleGet()
-        checkDevice()
+        // checkDevice()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     const handleSizeSelect = (event) => {
@@ -169,6 +169,10 @@ function Control() {
     const handleKeywordSelect = (event) => {
         console.log(event.target.value)
         setKeyword(event.target.value)
+    }
+    const handleUseMirror = (event) => {
+        // console.log(event)
+        setUseMirror(!useMirror)
     }
     const showHelpModel = () => {
         var myModal = document.getElementById('exampleModal')
@@ -202,7 +206,12 @@ function Control() {
                           {keywordItems}
                       </select>
                       <div className="form-check form-switch mt-2 m-auto">
-                          <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked={useMirror}></input>
+                          <input className="form-check-input" type="checkbox" role="switch"
+                                 id="flexSwitchCheckDefault"
+                                 checked={useMirror}
+                                 onChange={handleUseMirror}
+                          >
+                          </input>
                           <label className="form-check-label"
                                  htmlFor="flexSwitchCheckDefault">Use Chinese Mirrors (
                               <a href="https://unsplash.dogedoge.com/" target="_blank" rel="noreferrer">
