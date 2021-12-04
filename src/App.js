@@ -126,7 +126,6 @@ function Control({hsize, htopic}) {
         let UrlSize = hsize ? hsize : sizes[size]
         let UrlTopic = htopic ? htopic : keywords[keyword]['english']
         // 获取设备分辨率
-        let deviceSize =  getDeviceSize()
         let deviceName = getDevice()
         // 之后提取其中的 X 和 Y 值
         let X = UrlSize.split('x')[0]
@@ -135,7 +134,7 @@ function Control({hsize, htopic}) {
             setKeywords([{chinese:htopic, english:htopic}, ...keywords])
         }
         // 将设备尺寸存入清单
-        setSizes([{name:deviceSize.split('x')[0] + " x " + deviceSize.split('x')[1] + " ≈ Your "+deviceName, x:X, y:Y}, ...sizes])
+        setSizes([{name:getDeviceWidth() + " x " + getDeviceHeight() + " ≈ Your "+deviceName, x:X, y:Y}, ...sizes])
         // if (!hsize || !htopic) {
         //     window.location.replace("/"+X+"x"+Y+"/"+UrlTopic)
         // }
