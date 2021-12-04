@@ -91,9 +91,9 @@ function getDeviceHeight() {
     return window.screen.height * window.devicePixelRatio
 }
 
-function getDeviceSize() {
-    return  getDeviceWidth()+"x"+getDeviceHeight()
-}
+// function getDeviceSize() {
+//     return  getDeviceWidth()+"x"+getDeviceHeight()
+// }
 
 function Control({hsize, htopic}) {
     const [sizes, setSizes] = useState(defaultSizes)
@@ -123,12 +123,12 @@ function Control({hsize, htopic}) {
     useEffect(() => {
         // checkDevice()
         // 首先获取 Url 中 size topic 参数，若不存在以默认值代替
-        let UrlTopic = htopic ? htopic : keywords[keyword]['english']
+        // let UrlTopic = htopic ? htopic : keywords[keyword]['english']
         // 获取设备分辨率
         let deviceName = getDevice()
         // 之后提取其中的 X 和 Y 值
-        let X = hsize ? hsize.split('x')[0] : sizes[size]["x"]
-        let Y = hsize ? hsize.split('x')[1] : sizes[size]["y"]
+        // let X = hsize ? hsize.split('x')[0] : sizes[size]["x"]
+        // let Y = hsize ? hsize.split('x')[1] : sizes[size]["y"]
         if (htopic) {
             setKeywords([{chinese:htopic, english:htopic}, ...keywords])
         }
@@ -137,7 +137,7 @@ function Control({hsize, htopic}) {
         // if (!hsize || !htopic) {
         //     window.location.replace("/"+X+"x"+Y+"/"+UrlTopic)
         // }
-        handleGet(getDeviceWidth() , getDeviceHeight())
+        getImg(getDeviceWidth() , getDeviceHeight())
 
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -145,16 +145,7 @@ function Control({hsize, htopic}) {
         // handleGet()
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sizes])
-    const handleGet = (getX, getY) => {
-        // console.log("Get!")
-        // console.log(sizes[size])
-        let X = getX ? getX : sizes[size]['x']
-        let Y = getY ? getY : sizes[size]['y']
-        // console.log(X, Y)
-        // let imageUrl = 'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']
-        // setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
-        // console.log("url:",imgUrl)
-        // document.getElementById('random_wallpaper').src=imgUrl
+    const getImg = (X, Y) => {
         setGetting(true)
         axios.get('/api/'+X+'x'+Y+"?"+keywords[keyword]['english'])
             .then(function (response) {
@@ -183,6 +174,15 @@ function Control({hsize, htopic}) {
                 // always executed
                 setGetting(false)
             })
+    }
+    const handleGet = () => {
+        // console.log("Get!")
+        // console.log(sizes[size])
+        getImg(sizes[size]['x'], sizes[size]['y'])
+        // let imageUrl = 'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']
+        // setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
+        // console.log("url:",imgUrl)
+        // document.getElementById('random_wallpaper').src=imgUrl
     }
     // const handleRedirect = () => {
     //     let selectSizeStr = sizes[size]["x"]+"x"+sizes[size]["y"]
