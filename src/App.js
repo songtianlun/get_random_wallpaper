@@ -123,22 +123,21 @@ function Control({hsize, htopic}) {
     useEffect(() => {
         // checkDevice()
         // 首先获取 Url 中 size topic 参数，若不存在以默认值代替
-        let UrlSize = hsize ? hsize : sizes[size]
         let UrlTopic = htopic ? htopic : keywords[keyword]['english']
         // 获取设备分辨率
         let deviceName = getDevice()
         // 之后提取其中的 X 和 Y 值
-        let X = UrlSize.split('x')[0]
-        let Y = UrlSize.split('x')[1]
+        let X = hsize ? hsize.split('x')[0] : sizes[size]["x"]
+        let Y = hsize ? hsize.split('x')[1] : sizes[size]["y"]
         if (htopic) {
             setKeywords([{chinese:htopic, english:htopic}, ...keywords])
         }
         // 将设备尺寸存入清单
-        setSizes([{name:getDeviceWidth() + " x " + getDeviceHeight() + " ≈ Your "+deviceName, x:X, y:Y}, ...sizes])
+        setSizes([{name:getDeviceWidth() + " x " + getDeviceHeight() + " ≈ Your "+deviceName, x:getDeviceWidth(), y:getDeviceHeight()}, ...sizes])
         // if (!hsize || !htopic) {
         //     window.location.replace("/"+X+"x"+Y+"/"+UrlTopic)
         // }
-        handleGet(X, Y)
+        handleGet(getDeviceWidth() , getDeviceHeight())
 
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
