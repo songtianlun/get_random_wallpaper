@@ -137,11 +137,10 @@ function Control({hsize, htopic}) {
         // console.log(sizes[size]["x"]+ "x" + sizes[size]["y"]);
         // 将设备尺寸存入清单
         setSizes([{name:X + " x " + Y + " ≈ Your "+deviceName, x:X, y:Y}, ...sizes])
-        if (!hsize || !htopic) {
-            window.location.replace("/"+X+"x"+Y+"/"+UrlTopic)
-        } else {
-            handleGet(X, Y)
-        }
+        // if (!hsize || !htopic) {
+        //     window.location.replace("/"+X+"x"+Y+"/"+UrlTopic)
+        // }
+        handleGet(X, Y)
 
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
