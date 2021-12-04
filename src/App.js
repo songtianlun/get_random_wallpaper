@@ -4,8 +4,9 @@ import './App.css';
 import axios from "axios";
 import {getDevice} from "./utils";
 import {Toast, Modal} from "bootstrap";
+import {useParams} from "react-router-dom";
 
-const sizes = [
+const defaultSizes = [
     {name:'0480 x 0854 - Android One', x:480, y:854},
     {name:'0640 x 1136 - iPhone SE（SE, 5S, 5C）', x:640, y:1136},
     {name:'0720 x 1280 - Oppo A57', x:720, y:1280},
@@ -58,7 +59,7 @@ const sizes = [
     {name:'6016 x 3384 - Apple Pro Display XDR', x:6016, y:3384}
 ];
 
-const keywords =[
+const defaultKeywords =[
     {chinese:"所有类型", english:"Wallpapers"},
     {chinese:"三维渲染图", english:"3DRenders"},
     {chinese:"纹理和图案", english:"Textures&Patterns"},
@@ -82,15 +83,6 @@ const keywords =[
     {chinese:"田径", english:"Athletics"},
 ]
 
-function checkDevice() {
-    let deviceName = getDevice()
-    let deviceWidth = window.screen.width * window.devicePixelRatio
-    let deviceHeight = window.screen.height * window.devicePixelRatio
-
-    console.log(deviceName, deviceWidth,deviceHeight)
-    console.log(window.devicePixelRatio)
-}
-
 function getDeviceWidth() {
     return window.screen.width * window.devicePixelRatio
 }
@@ -99,14 +91,21 @@ function getDeviceHeight() {
     return window.screen.height * window.devicePixelRatio
 }
 
-function Control() {
-    const [size, setSize] = useState(38);
-    const [keyword, setKeyword] = useState(0);
+function getDeviceSize() {
+    return  getDeviceWidth()+"x"+getDeviceHeight()
+}
+
+function Control({hsize, htopic}) {
+    const [sizes, setSizes] = useState(defaultSizes)
+    const [keywords, setKeywords] = useState(defaultKeywords)
+    const [size, setSize] = useState(0)
+    const [keyword, setKeyword] = useState(0)
     const [imgUrl, setImgUrl] = useState('https://source.unsplash.com/random/'+getDeviceWidth()+'x'+getDeviceHeight()+"?"+keywords[keyword]['english'])
     const [getting, setGetting]  = useState(false)
     const [toastTitle, setToastTitle] = useState("通知")
     const [toastMessage, setToastMessage] = useState("获取成功！")
     const [useMirror, setUseMirror] = useState(true)
+
     const listItems = sizes.map((obj,idx) =>
         <option  key={idx} value={idx}>{obj.name}</option>
     );
@@ -117,19 +116,51 @@ function Control() {
     const showToast = (message) => {
         var toastLiveExample = document.getElementById('liveToast')
         var toast = new Toast(toastLiveExample)
+        setToastTitle('通知')
         setToastMessage(message)
         toast.show()
     }
+    useEffect(() => {
+        // checkDevice()
+        // 首先获取 Url 中 size topic 参数，若不存在以默认值代替
+        let UrlSize = hsize ? hsize : getDeviceSize()
+        let UrlTopic = htopic ? htopic : keywords[keyword]['english']
+        // 之后提取其中的 X 和 Y 值
+        let deviceName = getDevice()
+        let X = UrlSize.split('x')[0]
+        let Y = UrlSize.split('x')[1]
 
-    const handleGet = () => {
+        if (htopic) {
+            setKeywords([{chinese:htopic, english:htopic}, ...keywords])
+        }
+        // console.log(hsize);
+        // console.log(sizes[size]["x"]+ "x" + sizes[size]["y"]);
+        // 将设备尺寸存入清单
+        setSizes([{name:X + " x " + Y + " ≈ Your "+deviceName, x:X, y:Y}, ...sizes])
+        if (!hsize || !htopic) {
+            window.location.replace("/"+X+"x"+Y+"/"+UrlTopic)
+        } else {
+            handleGet(X, Y)
+        }
+
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    useEffect(() => {
+        // handleGet()
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sizes])
+    const handleGet = (getX, getY) => {
         // console.log("Get!")
         // console.log(sizes[size])
+        let X = getX ? getX : sizes[size]['x']
+        let Y = getY ? getY : sizes[size]['y']
+        // console.log(X, Y)
         // let imageUrl = 'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']
         // setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
         // console.log("url:",imgUrl)
         // document.getElementById('random_wallpaper').src=imgUrl
         setGetting(true)
-        axios.get('/api/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
+        axios.get('/api/'+X+'x'+Y+"?"+keywords[keyword]['english'])
             .then(function (response) {
                 // handle success
                 // console.log(response);
@@ -157,11 +188,14 @@ function Control() {
                 setGetting(false)
             })
     }
-    useEffect(() => {
-        // handleGet()
-        // checkDevice()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    // const handleRedirect = () => {
+    //     let selectSizeStr = sizes[size]["x"]+"x"+sizes[size]["y"]
+    //     if(hsize !== selectSizeStr){
+    //         window.location.replace("/"+selectSizeStr+"/"+keywords[keyword]['english'])
+    //     } else {
+    //         handleGet()
+    //     }
+    // }
     const handleSizeSelect = (event) => {
         console.log(event.target.value)
         setSize(event.target.value)
@@ -251,10 +285,10 @@ function Control() {
       )
 }
 
-function Main() {
+function Main({hsize, htopic}) {
     return (
         <main className="px-3 mb-4">
-            <Control />
+            <Control hsize={hsize} htopic={htopic}/>
         </main>
     )
 }
@@ -377,13 +411,14 @@ function HelpModal({url}) {
 }
 
 function App() {
-  return (
-    <div className="container-fluid h-100 p-3 mx-auto d-flex flex-column">
-        <Header />
-        <Main />
-        <Footer />
-    </div>
-  );
+    let params = useParams()
+    return (
+        <div className="container-fluid h-100 p-3 mx-auto d-flex flex-column">
+            <Header />
+            <Main hsize={params.size} htopic={params.topic}/>
+            <Footer />
+        </div>
+    );
 }
 
 export default App;
