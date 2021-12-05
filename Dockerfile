@@ -1,10 +1,10 @@
-FROM node:12.13-alpine As development
+FROM node:12.13-alpine As builder
 
 WORKDIR /app
 
 COPY package*.json .
 
-RUN npm install --only=development
+RUN npm install
 
 COPY . .
 
@@ -24,7 +24,7 @@ RUN ls /app
 
 COPY . .
 
-COPY --from=development /app/build /app/build
+COPY --from=builder /app/build /app/build
 
 EXPOSE 3010
 
