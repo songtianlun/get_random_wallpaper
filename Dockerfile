@@ -23,6 +23,6 @@ RUN npm install -g server --only=production
 
 COPY . .
 
-COPY --from=development /usr/src/app/build ./build
+COPY --from=development /app/build ./build
 
 CMD ["serve", "-s", "./build"]
