@@ -28,6 +28,6 @@ COPY . .
 
 COPY --from=builder /app/build /app/build
 
-EXPOSE 3010
+EXPOSE 3012
 
 CMD ["node", "./app.js"]
