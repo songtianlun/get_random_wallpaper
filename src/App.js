@@ -24,7 +24,11 @@ function Control({hsize, htopic}) {
     const [keywords, setKeywords] = useState(defaultKeywords)
     const [size, setSize] = useState(0)
     const [keyword, setKeyword] = useState(0)
-    const [imgUrl, setImgUrl] = useState('https://source.unsplash.com/random/'+getDeviceWidth()+'x'+getDeviceHeight()+"?"+keywords[keyword]['english'])
+    const [imgUrl, setImgUrl] = useState(
+        'https://source.unsplash.com/random/'+
+        getDeviceWidth()+'x'+
+        getDeviceHeight()+"?"+
+        keywords[keyword]['english'])
     const [getting, setGetting]  = useState(false)
     const [toastTitle, setToastTitle] = useState("通知")
     const [toastMessage, setToastMessage] = useState("获取成功！")
@@ -53,7 +57,11 @@ function Control({hsize, htopic}) {
             setKeywords([{chinese:htopic, english:htopic}, ...keywords])
         }
         // 将设备尺寸存入清单
-        setSizes([{name:getDeviceWidth() + " x " + getDeviceHeight() + " ≈ Your "+deviceName, x:getDeviceWidth(), y:getDeviceHeight()}, ...sizes])
+        setSizes([
+            {name:getDeviceWidth() +
+                    " x " + getDeviceHeight() +
+                    " ≈ Your "+deviceName, x:getDeviceWidth(), y:getDeviceHeight()
+            }, ...sizes])
         // if (!hsize || !htopic) {
         //     window.location.replace("/"+X+"x"+Y+"/"+UrlTopic)
         // }
@@ -79,7 +87,12 @@ function Control({hsize, htopic}) {
                     showToast("获取成功！")
                 }
                 if(useMirror){
-                    setImgUrl(response.request.responseURL.replace(/images\.unsplash\.com/, "dogefs.s3.ladydaily.com/~/source/unsplash"))
+                    setImgUrl(
+                        response.request
+                            .responseURL
+                            .replace(
+                                /images\.unsplash\.com/,
+                                "dogefs.s3.ladydaily.com/~/source/unsplash"))
                 } else {
                     setImgUrl(response.request.responseURL);
                 }
@@ -98,10 +111,6 @@ function Control({hsize, htopic}) {
         // console.log("Get!")
         // console.log(sizes[size])
         getImg(sizes[size]['x'], sizes[size]['y'])
-        // let imageUrl = 'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']
-        // setImgUrl('https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english'])
-        // console.log("url:",imgUrl)
-        // document.getElementById('random_wallpaper').src=imgUrl
     }
     const handleSizeSelect = (event) => {
         console.log(event.target.value)
@@ -164,7 +173,10 @@ function Control({hsize, htopic}) {
                               disabled={getting}>
 
                           {getting ?
-                              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : "Get"
+                              <span
+                                  className="spinner-border spinner-border-sm"
+                                  role="status"
+                                  aria-hidden="true"></span> : "Get"
                           }
                       </button>
                       <button type="button" className="col btn btn-primary mt-2 w-100"
@@ -174,11 +186,6 @@ function Control({hsize, htopic}) {
                               }}>Download</button>
                       <button type="button" className="col btn btn-primary mt-2 w-100"
                               onClick={showHelpModel}>Help</button>
-
-                      {/*<div>*/}
-                      {/*    <p>随机接口: {'https://source.unsplash.com/random/'+sizes[size]['x']+'x'+sizes[size]['y']+"?"+keywords[keyword]['english']}</p>*/}
-                      {/*    <p>图片直链: {imgUrl}</p>*/}
-                      {/*</div>*/}
 
                   </div>
                   <div className="col-sm-12 col-lg-8 align-content-center h-100 ">
