@@ -1,4 +1,5 @@
 export const defaultSizes = [
+    {name:'任意尺寸', x:null, y:null},
     {name:'0480 x 0854 - Android One', x:480, y:854},
     {name:'0640 x 1136 - iPhone SE（SE, 5S, 5C）', x:640, y:1136},
     {name:'0720 x 1280 - Oppo A57', x:720, y:1280},
@@ -52,7 +53,15 @@ export const defaultSizes = [
 ];
 
 export const defaultKeywords =[
-    {chinese:"所有类型", english:"Wallpapers"},
+    {chinese:"任意类型", english: ""},
+    {chinese:"壁纸", english:"Wallpapers"},
+    {chinese:"中国风", english: "chinese"},
+    {chinese:"浅色调", english: "tint"},
+    {chinese: "草原", english: "prairie"},
+    {chinese: "春", english: "spring"},
+    {chinese: "夏", english: "summer"},
+    {chinese: "秋", english: "autumn"},
+    {chinese: "冬", english: "winter"},
     {chinese:"三维渲染图", english:"3DRenders"},
     {chinese:"纹理和图案", english:"Textures&Patterns"},
     {chinese:"建筑", english:"Architecture"},

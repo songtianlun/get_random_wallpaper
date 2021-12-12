@@ -75,7 +75,11 @@ function Control({hsize, htopic}) {
     }, [sizes])
     const getImg = (X, Y) => {
         setGetting(true)
-        axios.get('/api/'+X+'x'+Y+"?"+keywords[keyword]['english'])
+        let get_random_url = '/api/'
+        if(X !== null) { get_random_url += (X+'x'+Y) }
+        get_random_url += "?"+keywords[keyword]['english']
+        console.log("get_url",get_random_url)
+        axios.get(get_random_url)
             .then(function (response) {
                 // console.log(response);
                 // console.log(response.request.responseURL);
