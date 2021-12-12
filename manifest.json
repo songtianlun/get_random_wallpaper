@@ -1,7 +1,6 @@
 {
-  "short_name": "RandomWP",
-  "name": "Random Wallpaper",
-  "description" : "一个随机壁纸生成器。",
+  "short_name": "React App",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
@@ -9,17 +8,17 @@
       "type": "image/x-icon"
     },
     {
-      "src": "icon-192-maskable.png",
+      "src": "logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icon-512-maskable.png",
+      "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
