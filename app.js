@@ -21,7 +21,7 @@ app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-const port = process.env.LEANCLOUD_APP_PORT || 3010;
+const port = process.env.PORT || process.env.LEANCLOUD_APP_PORT || 3010;
 app.listen(port);
 
 console.log('App is listening on port ' + port);
