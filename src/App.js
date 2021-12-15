@@ -192,10 +192,11 @@ function Control({hsize, htopic}) {
                               onClick={showHelpModel}>Help</button>
 
                   </div>
-                  <div className="col-sm-12 col-lg-8 align-content-center h-100 ">
-                      <img className="mh-100 mw-100 mt-2 shadow rounded"
+                  <div className="col-sm-12 col-lg-8 align-content-center h-100">
+                      <img className="mh-100 mw-100 mt-2 p-2 shadow-lg rounded bg-gradient"
                            id="random_wallpaper"
-                           width={sizes[size]['x']+'px'}
+                           width="auto"
+                           height="auto"
                            src={imgUrl} alt="random" />
                   </div>
               </div>
