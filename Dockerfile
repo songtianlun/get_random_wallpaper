@@ -22,7 +22,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY app.js ./
 
-RUN ls /app
+RUN npm install express
 
 COPY . .
 
