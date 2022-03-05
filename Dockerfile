@@ -22,7 +22,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY app.js ./
 
-RUN npm install express
+RUN npm install express && npm install http-proxy-middleware
 
 COPY . .
 
