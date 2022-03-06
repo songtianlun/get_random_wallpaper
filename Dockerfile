@@ -16,6 +16,7 @@ FROM node:12.13-alpine as production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
+ENV PORT=3010
 
 WORKDIR /app
 
@@ -28,6 +29,6 @@ COPY . .
 
 COPY --from=builder /app/build /app/build
 
-EXPOSE 3000
+EXPOSE 3010
 
 CMD ["node", "./app.js"]
