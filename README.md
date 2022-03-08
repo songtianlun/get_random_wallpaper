@@ -1,3 +1,4 @@
+# Get Random Wallpaper Now
 # Getting Started with Create React App
 
 [![Build and Deploy](https://github.com/songtianlun/get_random_wallpaper/actions/workflows/main.yml/badge.svg)](https://github.com/songtianlun/get_random_wallpaper/actions/workflows/main.yml)
